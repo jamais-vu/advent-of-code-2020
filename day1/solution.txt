@@ -1,0 +1,2 @@
+Part 1: The pair which sum to 2020 is (892, 1128), and their product is 1006176
+Part 2: The pair which sum to 2020 is (874, 890, 256), and their product is 199132160
