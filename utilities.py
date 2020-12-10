@@ -12,11 +12,30 @@
 
 import os
 
+from typing import List
+
+def read_from_file(input_file: str) -> List[str]:
+    """Opens and reads a text file and returns a list of the lines, in order.
+
+    Parameters:
+        input_file : str
+            The name of the file to read.
+
+    Returns:
+        List[str]
+            A list of lines in the file, in order of appearance.
+    """
+    result = []
+    with open(input_file, mode='r') as file_object:
+        for line in file_object:
+            result.append(line)
+    return result
+
 def write_to_file(
-        line_list,
-        output_file,
-        check_before_write = True,
-        verbose = True):
+        line_list: List[str],
+        output_file: str,
+        check_before_write: bool = True,
+        verbose: bool = True) -> None:
     """Opens and writes a list of strings to the given file, in indexed order.
 
     Parameters:
