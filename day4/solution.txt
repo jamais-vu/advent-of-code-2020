@@ -1,0 +1,2 @@
+Part 1: There are 208 valid passports.
+Part 2: There are 167 valid passports.
