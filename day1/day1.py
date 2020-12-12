@@ -4,17 +4,13 @@ import operator
 
 import sys
 sys.path.append('..')
-from utilities import write_to_file
+from utilities import prod, write_to_file
 
 from typing import List, Tuple
 
 
 def main():
-    # TODO: As of Python 3.8, `math.prod` can take the product of an iterable.
-    #       Here we use `functools.reduce(operator.mul, iterable)`.
     
-    prod = lambda iterable : functools.reduce(operator.mul, iterable)
-
     numbers = read_from_file('input.txt')
 
     # Part 1: 2 numbers which sum to 2020

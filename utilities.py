@@ -10,12 +10,16 @@
 # Why not `import ..utilities`? Because it throws
 #   ValueError: attempted relative import beyond top-level package
 
+import functools
+import operator
 import os
 
-from typing import List
+from typing import Iterable, List
 
 def read_from_file(input_file: str) -> List[str]:
     """Opens and reads a text file and returns a list of the lines, in order.
+
+    Note that this includes newlines ('\n') at the end of each line.
 
     Parameters:
         input_file : str
@@ -68,3 +72,10 @@ def write_to_file(
     
     if verbose: 
         print('Write complete.\n')
+
+def prod(iterable: Iterable) -> float:
+    """Finds the product of all numbers in a given iterable.
+
+    TODO: As of Python 3.8, `math.prod` can take the product of an iterable.
+    """
+    return functools.reduce(operator.mul, iterable)
