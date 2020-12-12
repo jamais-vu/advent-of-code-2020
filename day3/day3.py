@@ -20,7 +20,7 @@ def main():
 
     # slope[0] represents the step right. slope[1] represents the step down.
     slope_1: Tuple[int, int] = (3, 1)
-    solution_1: int = solve(tree_grid, slope_1)
+    solution_1: int = solve(tree_grid, slope_1, debug=True)
 
     s1: str = f'Part 1: With slope {slope_1}, we encounter {solution_1} trees.'
     print(s1)
@@ -44,7 +44,7 @@ def main():
         slopes_and_results[slope] = solve(tree_grid, slope)
 
     solution_2: int = prod(slopes_and_results.values())
-    s2: str = f'Part 2: The product of the results of the given slopes is {solution_2}.'
+    s2: str = f'Part 2: The product of the results of the given slopes is{solution_2}.'
 
     for slope, result in slopes_and_results.items():
         s2 += f'\n\t- With slope {slope}, we encounter {result} trees.'
@@ -54,7 +54,12 @@ def main():
     write_to_file([s1, s2], 'solution.txt')
 
 def solve(tree_grid: List[str], slope: Tuple[int, int], debug: bool = False) -> int:
-    """Goes through the tree grid and counts the number of trees encountered."""
+    """Goes through the tree grid and counts the number of trees encountered.
+
+    If debug is True:
+        - will print to console MANY things for troubleshooting.
+        - will write the path through the tree grid to 'replaced_grid.txt'.
+    """
 
     # Each row in the tree grid has the same length, which we consider to repeat
     # infinitely to the right. We use modular arithmetic to determine position.
@@ -94,12 +99,12 @@ def solve(tree_grid: List[str], slope: Tuple[int, int], debug: bool = False) -> 
                 print(f'repl_row: {replaced_row}')
 
             j = (j + step_right) % modulus
-            print(f'`j = (j + step_right) % modulus` ->\
-            j = ({j} + {step_right}) % {modulus} -> {j}')
 
     if debug:
-        draw_tree_grid: str = '\n'.join(f'{tree_grid[i]} i={str(i)}' for i in range(len(tree_grid)))
-        draw_replaced_grid: str = '\n'.join(f'{replaced_grid[i]} i={str(i)}' for i in range(len(replaced_grid)))
+        draw_tree_grid: str = '\n'.join(f'{tree_grid[i]} i={str(i)}' 
+                                        for i in range(len(tree_grid)))
+        draw_replaced_grid: str = '\n'.join(f'{replaced_grid[i]} i={str(i)}' 
+                                            for i in range(len(replaced_grid)))
         print(f'tree_grid:\n{draw_tree_grid}')
         print(f'replaced_grid:\n{draw_replaced_grid}')
         write_to_file(replaced_grid, 'replaced_grid.txt')
