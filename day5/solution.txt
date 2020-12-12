@@ -1,0 +1,2 @@
+Part 1: The highest seat ID is 801
+Part 2: My seat ID is 597
