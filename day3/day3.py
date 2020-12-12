@@ -14,21 +14,6 @@ def main():
     with open('input.txt') as input_file:
         tree_grid = (input_file.read()).split('\n')
 
-    # TODO: Pretty sure I'm getting the wrong answer for Part 2 because of the 
-    #       slope with step_down = 2
-    # My answer:
-    #   Part 2: The product of the results of the given slopes is 3818892840.
-    #       - With slope (1, 1), we encounter 58 trees.
-    #       - With slope (3, 1), we encounter 223 trees.
-    #       - With slope (5, 1), we encounter 105 trees.
-    #       - With slope (7, 1), we encounter 74 trees.
-    #       - With slope (1, 2), we encounter 38 trees.
-    #
-    # Note that for slope (3, 1), the answer 223 was correct (Part 1).
-    #
-    # print(solve(tree_grid, (1, 2), debug=True))
-    # quit()
-
     ##########
     # Part 1 #
     ##########
@@ -82,7 +67,6 @@ def solve(tree_grid: List[str], slope: Tuple[int, int], debug: bool = False) -> 
     step_right: int = slope[0]
     step_down: int = slope[1]
 
-
     if debug:
         replaced_grid: List[str] = tree_grid.copy()
     
@@ -90,12 +74,9 @@ def solve(tree_grid: List[str], slope: Tuple[int, int], debug: bool = False) -> 
     # is always open ('.').
     tree_count: int = 0
     j: int = 0
-    for i in range(1, len(tree_grid), step_down):
+    for i in range(0, len(tree_grid), step_down):
 
             row = tree_grid[i]
-            j = (j + step_right) % modulus
-            print(f'`j = (j + step_right) % modulus` ->\
-            j = ({j} + {step_right}) % {modulus} -> {j}')
 
             if debug:
                 replaced_row = replace_row(row, j)
@@ -111,6 +92,10 @@ def solve(tree_grid: List[str], slope: Tuple[int, int], debug: bool = False) -> 
                 print(f'i,j: {i},{j}')
                 print(f'tree_row: {row}')
                 print(f'repl_row: {replaced_row}')
+
+            j = (j + step_right) % modulus
+            print(f'`j = (j + step_right) % modulus` ->\
+            j = ({j} + {step_right}) % {modulus} -> {j}')
 
     if debug:
         draw_tree_grid: str = '\n'.join(f'{tree_grid[i]} i={str(i)}' for i in range(len(tree_grid)))
