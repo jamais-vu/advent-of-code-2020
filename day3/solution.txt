@@ -1,0 +1,7 @@
+Part 1: With slope (3, 1), we encounter 223 trees.
+Part 2: The product of the results of the given slopes is 3818892840.
+	- With slope (1, 1), we encounter 58 trees.
+	- With slope (3, 1), we encounter 223 trees.
+	- With slope (5, 1), we encounter 105 trees.
+	- With slope (7, 1), we encounter 74 trees.
+	- With slope (1, 2), we encounter 38 trees.
