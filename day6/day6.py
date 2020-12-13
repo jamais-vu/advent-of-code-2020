@@ -1,5 +1,3 @@
-import re
- 
 from typing import List, Set
 
 def main():
@@ -7,7 +5,7 @@ def main():
     with open('input.txt') as input_file:
         # Each group is separated by two newlines, so we split up into a list
         # of strings, with each string being a full group's answers.
-        groups: List[str] = re.split(r'\n{2}', input_file.read())
+        groups: List[str] = input_file.read().split('\n\n')
 
     # Each person within a group has their answer separated by one newline,
     # so after splitting by group, we split by person.
