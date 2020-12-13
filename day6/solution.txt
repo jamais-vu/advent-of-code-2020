@@ -1,0 +1,2 @@
+Part 1: The sum of the counts is 6297.
+Part 2: The sum of the counts is 3158.
