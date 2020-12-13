@@ -7,19 +7,23 @@ def main():
     with open('input.txt') as input_file:
         # Each group is separated by two newlines, so we split up into a list
         # of strings, with each string being a full group's answers.
-        # Each person within a group has their answer separated by one newline,
-        # so after splitting by group, we split by person.
-        # 
-        #Example: 
-        #   answers[i][j] is the answers for the jth person in the jth group.
         groups: List[str] = re.split(r'\n{2}', input_file.read())
 
+    # Each person within a group has their answer separated by one newline,
+    # so after splitting by group, we split by person.
+    # `answers[i][j]` is the answers for the jth person in the ith group.
     answers: List[List[str]] = [group.split('\n') for group in groups]
 
     group_unions: List[Set[str]] = []
     group_intersections: List[Set[str]] = []
     for group in answers:
-        group_answers_as_sets = [set(person) for person in group]
+
+        # Each group is a List[str] of each person's answers.
+        # We create a List[Set[str]] the sets of each person's answer.
+        group_answers_as_sets: List[Set[str]] = [set(person) for person in group]
+
+        # Then, for the whole group, we take the union of answers, and the 
+        # intersection of answers.
         group_unions +=  set.union(*group_answers_as_sets)
         group_intersections += set.intersection(*group_answers_as_sets)
 
