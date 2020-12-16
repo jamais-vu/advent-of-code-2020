@@ -1,0 +1,1 @@
+Part 1: The product of the 1-jolt differences and the 3-jolt differences is 1656.
