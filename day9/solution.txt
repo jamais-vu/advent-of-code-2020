@@ -1,0 +1,2 @@
+Part 1: 27911108 is the first number which is not the sum of any two of the previous 25 numbers.
+Part 2: The sum of the smallest and largest numbers in the contiguous slice is 4023754.
