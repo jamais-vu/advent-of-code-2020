@@ -69,14 +69,6 @@ class CellularAutomaton:
 
         return new_grid
                 
-    def cell_transition(
-        self, 
-        coords: Tuple[int],
-        transition_rule: Callable[[Tuple[int]], str]
-        ) -> str:
-        """Determines the next state of a cell using the transition rule."""
-        return transition_rule(coords)
-
     def transition_rule_1(self, coords: Tuple[int], debug:bool = False) -> str:
         """The cell transition rule for Part 1."""
         adjacent_cell_states: List[str] = self.get_adjacent_cell_states(coords)
