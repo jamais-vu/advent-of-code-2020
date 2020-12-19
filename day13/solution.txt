@@ -1,0 +1,1 @@
+Part 1: 2995. The earliest bus is number 599 and it departs in 5 minutes.
