@@ -1,0 +1,1 @@
+Part 1: The Manhattan distance is 757.
