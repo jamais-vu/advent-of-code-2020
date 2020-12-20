@@ -41,10 +41,26 @@ def main():
     ##########
     # Part 2 #
     ##########
+    for line in lines:
+        instruction = line[0]
+        value = line[1]
 
 
 def apply_mask(value: str, mask: str, rule: str) -> str:
-    """Applies a mask to a 36-bit value, using the rules from part 1 or 2."""
+    """Applies a mask to a 36-bit value, using the rules from part 1 or 2.
+
+    Part 1 rules:
+        - If the bitmask bit is 0 or 1, the corresponding value bit is 
+          overwritten with 0 or 1 respectively.
+        - If the bitmask bit is X, the corresponding value bit is unchanged.
+        
+    Part 2 rules:
+        - If the bitmask bit is 0, the corresponding value bit is unchanged.
+        - If the bitmask bit is 1, the corresponding value bit is overwritten 
+          with 1.
+        - If the bitmask bit is X, the corresponding value bit is floating 
+          (written as 'X').
+    """
     new_value: str = ''
     
     if rule.lower() == 'part 1':
@@ -64,6 +80,7 @@ def apply_mask(value: str, mask: str, rule: str) -> str:
                 new_value += 'X'
     
     return new_value
+
 
 def get_memory_address(instruction: str) -> int:
     """Gets the memory address n specified by string of form 'mem[n]'."""
