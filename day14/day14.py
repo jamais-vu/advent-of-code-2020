@@ -16,6 +16,9 @@ def main():
     # Keys: string indices we change. Values: digit we change each index to.
     mask: str = ''
 
+    ##########
+    # Part 1 #
+    ##########
     for line in lines:
         instruction = line[0]
         value = line[1]
@@ -27,7 +30,7 @@ def main():
             binary_value = format(int(value), '036b') # Decimal to 36-bit binary
             address = get_memory_address(instruction)
             # print(f'memory address: {address}\nvalue:     {binary_value}')
-            new_value = apply_mask(binary_value, mask)
+            new_value = apply_mask(binary_value, mask, 'part 1')
             # print(f'new value: {new_value}')
             # print(f'decimal:   {int(new_value, 2)}')
             memory[address] = int(new_value, 2) # Write decimal value to memory.
@@ -35,14 +38,31 @@ def main():
     print(memory)
     print(sum(memory.values()))
 
-def apply_mask(value: str, mask: str) -> str:
-    """TODO docstring"""
+    ##########
+    # Part 2 #
+    ##########
+
+
+def apply_mask(value: str, mask: str, rule: str) -> str:
+    """Applies a mask to a 36-bit value, using the rules from part 1 or 2."""
     new_value: str = ''
-    for i in range(0, len(mask)):
-        if mask[i] == 'X':
-            new_value += value[i]
-        else:
-            new_value += mask[i]
+    
+    if rule.lower() == 'part 1':
+        for i in range(0, len(mask)):
+            if mask[i] == 'X':
+                new_value += value[i]
+            else:
+                new_value += mask[i]
+    
+    elif rule.lower() == 'part 2':
+        for i in range(0, len(mask)):
+            if mask[i] == '0':
+                new_value += value[i]
+            elif mask[i] == '1':
+                new_value += '1'
+            else:
+                new_value += 'X'
+    
     return new_value
 
 def get_memory_address(instruction: str) -> int:
