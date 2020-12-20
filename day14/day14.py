@@ -14,15 +14,14 @@ def main():
     memory: Dict[int, int] = {} 
 
     # Keys: string indices we change. Values: digit we change each index to.
-    mask: Dict[int, str] = {}
+    mask: str = ''
 
     for line in lines:
         instruction = line[0]
         value = line[1]
 
         if instruction == 'mask':
-            mask = create_mask(value)
-            # print('mask: ', mask)
+            mask = value
 
         else:
             binary_value = format(int(value), '036b') # Decimal to 36-bit binary
@@ -36,20 +35,15 @@ def main():
     print(memory)
     print(sum(memory.values()))
 
-
-def create_mask(mask_as_str: str) -> Dict[int, str]:
-    """TODO docstring"""
-    mask: Dict[int, int] = {}
-    for i in range(len(mask_as_str) - 1, -1, -1):
-        if mask_as_str[i] != 'X':
-            mask[i] = mask_as_str[i]
-    return mask
-
 def apply_mask(value: str, mask: str) -> str:
     """TODO docstring"""
-    for index, digit in mask.items():
-        value = value[0:index] + digit + value[index + 1:]
-    return value
+    new_value: str = ''
+    for i in range(0, len(mask)):
+        if mask[i] == 'X':
+            new_value += value[i]
+        else:
+            new_value += mask[i]
+    return new_value
 
 def get_memory_address(instruction: str) -> int:
     """Gets the memory address n specified by string of form 'mem[n]'."""
