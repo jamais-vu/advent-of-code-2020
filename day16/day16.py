@@ -13,13 +13,18 @@ def main():
     ranges: List[Iterable[int]] = []
     for field in fields:
         ranges += get_field_ranges(field)
-    # print(ranges)
+
+    print(fields)
+    for field in fields:
+        print(re.match(r'.*(?=:)', field)[0])
 
     # First index contains string 'your ticket:', which we don't use.
-    your_ticket: List[str] = notes[1].split('\n')[1:]
+    your_ticket: List[int] = list(
+        map(int, value) for value in notes[1].split('\n')[1:])
 
     # Zeroth index contains string 'nearby tickets:', which we don't use.
-    nearby_tickets: List[str] = notes[2].split('\n')[1:]
+    nearby_tickets: List[List[int]] = [
+        get_ticket_values(ticket) for ticket in notes[2].split('\n')[1:]]
     
     # print(fields, your_ticket, nearby_tickets)
 
@@ -30,7 +35,8 @@ def main():
         # print('is_valid_ticket: ', is_valid_ticket(ticket, ranges))
         sum_of_invalid_values += is_valid_ticket(ticket, ranges)
 
-    print(sum_of_invalid_values)
+    s1: str = f'Part 1: The sum of invalid values is {sum_of_invalid_values}.'
+    print(s1)
 
 
 def get_field_ranges(s: str) -> List[Iterable[int]]:
@@ -56,11 +62,11 @@ def is_valid_value(n: int, ranges: List[Iterable[int]]) -> bool:
     return False
 
 
-def is_valid_ticket(ticket: str, ranges: List[Iterable[int]]) -> int:
+def is_valid_ticket(values: List[int], ranges: List[Iterable[int]]) -> int:
     """
     Returns 0 if the ticket is valid; otherwise returns sum of invalid fields.
     """
-    return sum(n for n in get_ticket_values(ticket) if not is_valid_value(n, ranges))
+    return sum(n for n in values if not is_valid_value(n, ranges))
 
 
 if __name__ == '__main__':
