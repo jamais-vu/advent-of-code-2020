@@ -1,6 +1,7 @@
+import itertools
 import re
 
-from typing import Iterable, List
+from typing import Dict, Iterable, List
 
 
 def main():
@@ -9,14 +10,12 @@ def main():
     with open('input.txt') as input_file:
         notes = input_file.read().split('\n\n')
 
+    # Dict mapping field names to list of valid ranges for each field
     fields: List[str] = notes[0].split('\n')
-    ranges: List[Iterable[int]] = []
+    ranges: Dict[str, List[Iterable[int]]] = {}
     for field in fields:
-        ranges += get_field_ranges(field)
-
-    print(fields)
-    for field in fields:
-        print(re.match(r'.*(?=:)', field)[0])
+        field_name: str = re.match(r'.*(?=:)', field)[0]
+        ranges[field_name] = get_field_ranges(field)
 
     # First index contains string 'your ticket:', which we don't use.
     your_ticket: List[int] = list(
@@ -29,11 +28,12 @@ def main():
     # print(fields, your_ticket, nearby_tickets)
 
     sum_of_invalid_values: int = 0
+    # A list of all ranges, regardless of field.
+    all_ranges: List[Iterable[int]] = list(
+        itertools.chain.from_iterable(ranges.values()))
+    
     for ticket in nearby_tickets:
-        # print('ticket: ', ticket)
-        # print('values: ', get_ticket_values(ticket))
-        # print('is_valid_ticket: ', is_valid_ticket(ticket, ranges))
-        sum_of_invalid_values += is_valid_ticket(ticket, ranges)
+        sum_of_invalid_values += is_valid_ticket(ticket, all_ranges)
 
     s1: str = f'Part 1: The sum of invalid values is {sum_of_invalid_values}.'
     print(s1)
@@ -54,19 +54,19 @@ def get_ticket_values(ticket: str) -> List[int]:
     return [int(n) for n in ticket.split(',')]
 
 
-def is_valid_value(n: int, ranges: List[Iterable[int]]) -> bool:
+def is_valid_value(n: int, valid_ranges: List[Iterable[int]]) -> bool:
     """Checks whether the given integer is within any of the given ranges."""
-    for r in ranges:
+    for r in valid_ranges:
         if n in r:
             return True
     return False
 
 
-def is_valid_ticket(values: List[int], ranges: List[Iterable[int]]) -> int:
+def is_valid_ticket(values: List[int], valid_ranges: List[Iterable[int]]) -> int:
     """
     Returns 0 if the ticket is valid; otherwise returns sum of invalid fields.
     """
-    return sum(n for n in values if not is_valid_value(n, ranges))
+    return sum(n for n in values if not is_valid_value(n, valid_ranges))
 
 
 if __name__ == '__main__':
