@@ -1,4 +1,6 @@
+import functools
 import itertools
+import operator
 import re
 
 from collections import defaultdict
@@ -8,7 +10,7 @@ from typing import Dict, Iterable, List
 def main():
 
     notes: List[str] = []
-    with open('example_1.txt') as input_file:
+    with open('input.txt') as input_file:
         notes = input_file.read().split('\n\n')
 
     fields: List[str] = notes[0].split('\n')
@@ -21,8 +23,7 @@ def main():
 
     # Create a list of the values on your ticket.
     # First index contains string 'your ticket:', which we don't use.
-    your_ticket: List[int] = list(
-        map(int, value) for value in notes[1].split('\n')[1:])
+    your_ticket: List[int] = list(map(int, notes[1].split(',')[1:]))
 
     # Create a list of lists of the values on each ticket.
     # Zeroth index contains string 'nearby tickets:', which we don't use.
@@ -33,24 +34,24 @@ def main():
     all_valid_ranges: List[Iterable[int]] = list(
         itertools.chain.from_iterable(ranges.values()))
     
-    # A list of tickets which have no invalid values
+    # We find the sum of all invalid values on all tickets, which is the 
+    # solution to Part 1.
+    # We also create a list of all valid tickets, which is used in Part 2.
     valid_tickets: List[List[int]] = []
-
     sum_of_invalid_values: int = 0
     for ticket in nearby_tickets:
         invalid_values = is_valid_ticket(ticket, all_valid_ranges)
         sum_of_invalid_values += invalid_values
         if invalid_values == 0:
-            # The ticket is valid if its invalid values are 0.
+            # The ticket is valid.
             valid_tickets += [ticket]
 
     s1: str = f'Part 1: The sum of invalid values is {sum_of_invalid_values}.'
     print(s1)
 
-    # Part 2 
-
-    print(ranges.keys())
-    print(valid_tickets)
+    ##########
+    # Part 2 #
+    ##########
 
     number_of_fields: int = len(fields)
     number_of_valid_tickets: int = len(valid_tickets)
@@ -69,32 +70,40 @@ def main():
             # else:
                 # print(f'column {column} is NOT {field_name}')
 
-    # List of fields for which there is only one column of valid values.
-    set_fields: List[str] = [v[0] for v in column_to_field.values() if len(v) == 1]
-    # print(column_to_field)
-    # print(set_fields)
+    # Set of fields for which there is only one column of valid values.
+    solved_fields: Set[str] = {
+        v[0] for v in column_to_field.values() if len(v) == 1}
 
     # What we have is some columns which can only be one field. We consider 
-    # these fields to be "set"; they cannot be any other column.
+    # these fields to be "solved"; they cannot be any other column.
     # Since those columns are set to those fields, we remove those field names 
     # from the other columns, and check again which columns can only be one 
     # field. We repeat this process until each column can only be one field.
-    # (This is some sort of contraint problem but I don't know the name.)
-    i: int = 0
-    while len(set_fields) < number_of_fields:
-        set_field = set_fields[i]
-        for column, fields in column_to_field.items():
-            if set_field in fields and len(fields) != 1:
-                column_to_field[column].remove(set_field)
-            if set_field not in fields and len(fields) == 1:
-                set_fields += [fields[0]]
-        i += 1
+    # (This is some sort of contraint problem, but I don't know the name.)
+    while len(solved_fields) < number_of_fields:
+        for solved_field in solved_fields:
+            for column, fields in column_to_field.items():
+                if solved_field in fields and len(fields) != 1:
+                    column_to_field[column].remove(solved_field)
+        solved_fields =  {v[0] for v in column_to_field.values() if len(v) == 1}
 
-    print(set_fields)
     print(column_to_field)
 
     columns_as_str: str = '\n'.join(sorted(f'{column}: {field_name}' for column, field_name in column_to_field.items()))
     print(columns_as_str)
+
+    # Get values of each field in `your_ticket` which starts with 'departure'.
+    starts_with_departure: List[int] =[]
+    for column, field_name in column_to_field.items():
+        if field_name[0].startswith('departure'):
+            print(column, field_name)
+            starts_with_departure.append(your_ticket[column])
+
+    # TODO: This gives 337940985703, which AOC says is too low.
+    solution_2 = functools.reduce(operator.mul, starts_with_departure)
+    s2: str = 'Part 2: The product of the fields on my ticket starting with'\
+              f' \'departure\' is {solution_2}.'
+    print(s2)
 
 
 def get_field_ranges(s: str) -> List[Iterable[int]]:
