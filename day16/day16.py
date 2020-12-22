@@ -10,30 +10,33 @@ def main():
     with open('input.txt') as input_file:
         notes = input_file.read().split('\n\n')
 
-    # Dict mapping field names to list of valid ranges for each field
     fields: List[str] = notes[0].split('\n')
+
+    # Create a dict mapping field names to list of valid ranges for each field.
     ranges: Dict[str, List[Iterable[int]]] = {}
     for field in fields:
         field_name: str = re.match(r'.*(?=:)', field)[0]
         ranges[field_name] = get_field_ranges(field)
 
+    # Create a list of the values on your ticket.
     # First index contains string 'your ticket:', which we don't use.
     your_ticket: List[int] = list(
         map(int, value) for value in notes[1].split('\n')[1:])
 
+    # Create a list of lists of the values on each ticket.
     # Zeroth index contains string 'nearby tickets:', which we don't use.
     nearby_tickets: List[List[int]] = [
         get_ticket_values(ticket) for ticket in notes[2].split('\n')[1:]]
     
     # print(fields, your_ticket, nearby_tickets)
 
-    sum_of_invalid_values: int = 0
-    # A list of all ranges, regardless of field.
-    all_ranges: List[Iterable[int]] = list(
+    # A list of all valid ranges, regardless of field.
+    all_valid_ranges: List[Iterable[int]] = list(
         itertools.chain.from_iterable(ranges.values()))
     
+    sum_of_invalid_values: int = 0
     for ticket in nearby_tickets:
-        sum_of_invalid_values += is_valid_ticket(ticket, all_ranges)
+        sum_of_invalid_values += is_valid_ticket(ticket, all_valid_ranges)
 
     s1: str = f'Part 1: The sum of invalid values is {sum_of_invalid_values}.'
     print(s1)
