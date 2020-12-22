@@ -1,0 +1,2 @@
+Part 1: The sum of invalid values is 24980.
+Part 2: The product of the fields on my ticket starting with 'departure' is 809376774329.

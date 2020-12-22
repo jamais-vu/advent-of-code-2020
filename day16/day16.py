@@ -21,9 +21,10 @@ def main():
         field_name: str = re.match(r'.*(?=:)', field)[0]
         ranges[field_name] = get_field_ranges(field)
 
-    # Create a list of the values on your ticket.
-    # First index contains string 'your ticket:', which we don't use.
-    your_ticket: List[int] = list(map(int, notes[1].split(',')[1:]))
+    # First line is 'your ticket:\n', which we don't use.
+    your_ticket_values: str = notes[1].split('\n')[1] 
+    # Second line is a list of comma-separated values.
+    your_ticket: List[int] = list(map(int, your_ticket_values.split(',')))
 
     # Create a list of lists of the values on each ticket.
     # Zeroth index contains string 'nearby tickets:', which we don't use.
@@ -87,23 +88,20 @@ def main():
                     column_to_field[column].remove(solved_field)
         solved_fields =  {v[0] for v in column_to_field.values() if len(v) == 1}
 
-    print(column_to_field)
-
-    columns_as_str: str = '\n'.join(sorted(f'{column}: {field_name}' for column, field_name in column_to_field.items()))
-    print(columns_as_str)
-
     # Get values of each field in `your_ticket` which starts with 'departure'.
     starts_with_departure: List[int] =[]
     for column, field_name in column_to_field.items():
         if field_name[0].startswith('departure'):
-            print(column, field_name)
+            # print(column, field_name)
             starts_with_departure.append(your_ticket[column])
 
-    # TODO: This gives 337940985703, which AOC says is too low.
     solution_2 = functools.reduce(operator.mul, starts_with_departure)
     s2: str = 'Part 2: The product of the fields on my ticket starting with'\
               f' \'departure\' is {solution_2}.'
     print(s2)
+
+    with open('solution.txt', mode='w') as output_file:
+        output_file.write(f'{s1}\n{s2}')
 
 
 def get_field_ranges(s: str) -> List[Iterable[int]]:
