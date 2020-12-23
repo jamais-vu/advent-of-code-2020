@@ -7,7 +7,7 @@ from typing import Deque, List, Set
 def main():
 
     decks: List[str] = []
-    with open('example_1.txt') as input_file:
+    with open('input.txt') as input_file:
         decks = input_file.read().split('\n\n')
 
     # We ignore the zeroth index because that only contains the player.
@@ -32,13 +32,14 @@ def main():
     else:
         winning_deck = deck_1
 
-    score: int = sum((i + 1) * v for i, v in enumerate(reversed(winning_deck)))
+    s1: int = sum((i + 1) * v for i, v in enumerate(reversed(winning_deck)))
     
-    print(f'Part 1: {score}')
+    print(f'Part 1: {s1}')
 
     ##########
     # Part 2 #
     ##########
+    # Slow and messy but works.
     deck_1: Deque[int] = deque(int(line) for line in decks[0].split('\n')[1:])
     deck_2: Deque[int] = deque(int(line) for line in decks[1].split('\n')[1:])
 
@@ -50,9 +51,12 @@ def main():
     else:
         winning_deck = deck_1
 
-    score: int = sum((i + 1) * v for i, v in enumerate(reversed(winning_deck)))
+    s2: int = sum((i + 1) * v for i, v in enumerate(reversed(winning_deck)))
     
-    print(f'Part 2: {score}')
+    print(f'Part 2: {s2}')
+
+    with open('solution.txt', mode='w') as output_file:
+        output_file.write(f'Part 1: {s1}\nPart 2: {s2}')
 
 
 def play_recursive_game(
