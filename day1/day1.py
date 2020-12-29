@@ -2,32 +2,31 @@ import functools
 import itertools
 import operator
 
-import sys
-sys.path.append('..')
-from utilities import prod, write_to_file
-
 from typing import List, Tuple
 
 
 def main():
     
-    numbers = read_from_file('input.txt')
+    with open('input.txt') as fo:
+        numbers = list(map(int, fo.read().split('\n')))
 
     # Part 1: 2 numbers which sum to 2020
     goal = 2020
     pair = solve(numbers, goal, 2)
-    solution_1 = prod(pair)
+    solution_1 = functools.reduce(operator.mul, pair)
     s1 = f'Part 1: The pair which sum to {goal} is {pair}, and their product is {solution_1}'
     print(s1)
 
     # Part 2: 3 numbers which sum to 2020
     goal = 2020
     triple = solve(numbers, goal, 3)
-    solution_2 = prod(triple)
+    solution_2 = functools.reduce(operator.mul, triple)
     s2 = f'Part 2: The pair which sum to {goal} is {triple}, and their product is {solution_2}'
     print(s2)
 
-    write_to_file([s1, s2], 'solution.txt')
+    with open('solution.txt', mode='w') as fo:
+        fo.write(f'{s1}\n{s2}')
+
 
 def read_from_file(input_file: str) -> List[int]:
     """Returns a list of integers in a text file with one integer per line."""
@@ -36,6 +35,7 @@ def read_from_file(input_file: str) -> List[int]:
         for line in file_object:
             numbers.append(int(line)) # Cast to int because we know they're ints
     return numbers
+
 
 def solve(numbers: List[int], goal: int, n: int) -> Tuple[int]:
     """
@@ -57,6 +57,7 @@ def solve(numbers: List[int], goal: int, n: int) -> Tuple[int]:
         ntuple = next(combos )
     
     return ntuple
+
 
 if __name__ == '__main__':
     main()

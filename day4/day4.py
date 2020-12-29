@@ -1,10 +1,5 @@
 import re
 
-import sys
-
-sys.path.append('..')
-
-from utilities import read_from_file, write_to_file
 from typing import Dict, List, Tuple
 
 def main():
@@ -50,7 +45,8 @@ def main():
     s2: str = f'Part 2: There are {solution_part_2} valid passports.'
 
     print(f'{s1}\n{s2}')
-    write_to_file([s1, s2], 'solution.txt')
+    with open('solution.txt', mode='w') as output_file:
+        output_file.write(f'{s1}\n{s2}')
 
 # TODO: Type hints for this
 class Passport:

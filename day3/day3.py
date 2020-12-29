@@ -1,9 +1,8 @@
-import sys
-
-sys.path.append('..')
+import functools
+import operator
 
 from typing import Dict, List, Tuple
-from utilities import prod, write_to_file
+
 
 def main():
 
@@ -20,7 +19,7 @@ def main():
 
     # slope[0] represents the step right. slope[1] represents the step down.
     slope_1: Tuple[int, int] = (3, 1)
-    solution_1: int = solve(tree_grid, slope_1, debug=True)
+    solution_1: int = solve(tree_grid, slope_1, debug=False)
 
     s1: str = f'Part 1: With slope {slope_1}, we encounter {solution_1} trees.'
     print(s1)
@@ -43,15 +42,17 @@ def main():
     for slope in slopes_and_results.keys():
         slopes_and_results[slope] = solve(tree_grid, slope)
 
-    solution_2: int = prod(slopes_and_results.values())
-    s2: str = f'Part 2: The product of the results of the given slopes is{solution_2}.'
+    solution_2: int = functools.reduce(operator.mul, slopes_and_results.values())
+    s2: str = f'Part 2: The product of the results of the given slopes is {solution_2}.'
 
     for slope, result in slopes_and_results.items():
         s2 += f'\n\t- With slope {slope}, we encounter {result} trees.'
 
     print(s2)
 
-    write_to_file([s1, s2], 'solution.txt')
+    with open('solution.txt', mode='w') as output_file:
+        output_file.write(f'{s1}\n{s2}')
+
 
 def solve(tree_grid: List[str], slope: Tuple[int, int], debug: bool = False) -> int:
     """Goes through the tree grid and counts the number of trees encountered.
@@ -107,9 +108,11 @@ def solve(tree_grid: List[str], slope: Tuple[int, int], debug: bool = False) -> 
                                             for i in range(len(replaced_grid)))
         print(f'tree_grid:\n{draw_tree_grid}')
         print(f'replaced_grid:\n{draw_replaced_grid}')
-        write_to_file(replaced_grid, 'replaced_grid.txt')
+        with open('replaced_grid2.txt', mode='w') as output_file:
+            output_file.write('\n'.join(replaced_grid))
 
     return tree_count
+
 
 def replace_row(row: str, j: int) -> str:
     """Returns the given row with the character at position j replaced.
@@ -122,6 +125,7 @@ def replace_row(row: str, j: int) -> str:
         return row[0:j] + 'X' + row[j+1:]
     else:
         raise Exception(f"Given row '{row}'' has neither '.' nor '#' at {j}!")
+
 
 if __name__ == '__main__':
     main()

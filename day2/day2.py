@@ -1,13 +1,12 @@
-import sys
 import re
 
-sys.path.append('..')
-
-from utilities import read_from_file, write_to_file
 from typing import Callable, List, Tuple
 
+
 def main():
-    passwords = read_from_file('input.txt')
+    
+    with open('input.txt') as fo:
+        passwords = fo.read().split('\n')
     
     solution_1 = solve(passwords, is_valid_part_1)
     s1 = f'Part 1: There are {solution_1} valid passwords.'
@@ -17,7 +16,9 @@ def main():
     s2 = f'Part 2: There are {solution_2} valid passwords.'
     print(s2)
 
-    write_to_file([s1, s2], 'solution.txt')
+    with open('solution2.txt', mode='w') as fo:
+        fo.write(f'{s1}\n{s2}')
+
 
 def tokenize(password_and_constraints: str) -> Tuple[int, int, str, str]:
     """Tokenizes a given password and constraints into a tuple.
@@ -37,6 +38,7 @@ def tokenize(password_and_constraints: str) -> Tuple[int, int, str, str]:
 
     return (a, b, letter, password)
 
+
 def is_valid_part_1(min_count: int, max_count: int, letter: str, 
     password: str) -> bool:
     """
@@ -46,6 +48,7 @@ def is_valid_part_1(min_count: int, max_count: int, letter: str,
       the min and max counts. 
     """
     return min_count <= password.count(letter) <= max_count
+
 
 def is_valid_part_2(position_1: int, position_2: int, letter: str, 
     password: str) -> bool:
@@ -62,6 +65,7 @@ def is_valid_part_2(position_1: int, position_2: int, letter: str,
     """
     return (password[position_1-1] == letter) ^ (password[position_2-1] == letter)
 
+
 def solve(passwords: List[str], is_valid: Callable[[str], bool]) -> int:
     """Counts the number of valid passwords in the list.
 
@@ -75,6 +79,7 @@ def solve(passwords: List[str], is_valid: Callable[[str], bool]) -> int:
         if is_valid(*tokenize(password_and_constraints)):
             count += 1
     return count
+
 
 if __name__ == '__main__':
     main()
